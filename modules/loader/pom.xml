@@ -32,6 +32,12 @@
       <groupId>com.opengamma.strata</groupId>
       <artifactId>strata-product</artifactId>
     </dependency>
+  <dependency>
+   <groupId>com.diffblue.cover</groupId>
+   <artifactId>cover-annotations</artifactId>
+   <version>1.7.0</version>
+   <scope>provided</scope>
+  </dependency>
     <dependency>
       <groupId>com.opengamma.strata</groupId>
       <artifactId>strata-market</artifactId>
@@ -63,6 +69,12 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+  <dependency>
+   <groupId>org.mockito</groupId>
+   <artifactId>mockito-junit-jupiter</artifactId>
+   <version>4.9.0</version>
+   <scope>test</scope>
+  </dependency>
     <dependency>
       <groupId>com.opengamma.strata</groupId>
       <artifactId>strata-collect</artifactId>

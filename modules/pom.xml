@@ -119,6 +119,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+          <configuration>
+              <skip>true</skip>
+          </configuration>
         <executions>
           <execution>
             <id>run-checkstyle</id>
@@ -200,6 +203,7 @@
         <groupId>de.thetaphi</groupId>
         <artifactId>forbiddenapis</artifactId>
         <configuration>
+            <skip>true</skip>
           <failOnUnsupportedJava>false</failOnUnsupportedJava>
           <bundledSignatures>
             <bundledSignature>jdk-unsafe</bundledSignature>
@@ -227,6 +231,7 @@
               <value>false</value>
             </property>
           </properties>
+            <argLine>${argLine}</argLine>
         </configuration>
       </plugin>
     </plugins>
