@@ -1,0 +1,54 @@
+package com.opengamma.strata.pricer.capfloor;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import com.diffblue.cover.annotations.ManagedByDiffblue;
+import com.diffblue.cover.annotations.MethodsUnderTest;
+import com.opengamma.strata.basics.ReferenceData;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+class SabrIborCapletFloorletVolatilityCalibratorDiffblueTest {
+  /**
+   * Test {@link SabrIborCapletFloorletVolatilityCalibrator#of(VolatilityIborCapFloorLegPricer,
+   * SabrIborCapFloorLegPricer, double, ReferenceData)}.
+   *
+   * <ul>
+   *   <li>When {@link BlackIborCapFloorLegPricer#DEFAULT}.
+   *   <li>Then LegPricer return {@link BlackIborCapFloorLegPricer}.
+   * </ul>
+   *
+   * <p>Method under test: {@link
+   * SabrIborCapletFloorletVolatilityCalibrator#of(VolatilityIborCapFloorLegPricer,
+   * SabrIborCapFloorLegPricer, double, ReferenceData)}
+   */
+  @Test
+  @DisplayName(
+      "Test of(VolatilityIborCapFloorLegPricer, SabrIborCapFloorLegPricer, double, ReferenceData); when DEFAULT; then LegPricer return BlackIborCapFloorLegPricer")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "SabrIborCapletFloorletVolatilityCalibrator SabrIborCapletFloorletVolatilityCalibrator.of(VolatilityIborCapFloorLegPricer, SabrIborCapFloorLegPricer, double, ReferenceData)"
+  })
+  void testOf_whenDefault_thenLegPricerReturnBlackIborCapFloorLegPricer() {
+    // Arrange
+    ReferenceData referenceData = mock(ReferenceData.class);
+
+    // Act
+    SabrIborCapletFloorletVolatilityCalibrator actualOfResult =
+        SabrIborCapletFloorletVolatilityCalibrator.of(
+            BlackIborCapFloorLegPricer.DEFAULT,
+            SabrIborCapFloorLegPricer.DEFAULT,
+            0.015625d,
+            referenceData);
+
+    // Assert
+    VolatilityIborCapFloorLegPricer legPricer = actualOfResult.getLegPricer();
+    assertTrue(legPricer instanceof BlackIborCapFloorLegPricer);
+    assertTrue(legPricer.getPeriodPricer() instanceof BlackIborCapletFloorletPeriodPricer);
+    assertSame(BlackIborCapFloorLegPricer.DEFAULT, legPricer);
+    assertSame(referenceData, actualOfResult.getReferenceData());
+  }
+}

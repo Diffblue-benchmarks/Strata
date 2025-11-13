@@ -1,0 +1,354 @@
+package com.opengamma.strata.market.curve.interpolator;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.diffblue.cover.annotations.ManagedByDiffblue;
+import com.diffblue.cover.annotations.MethodsUnderTest;
+import com.opengamma.strata.collect.array.DoubleArray;
+import com.opengamma.strata.market.curve.interpolator.StepUpperCurveInterpolator.Bound;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+class StepUpperCurveInterpolatorDiffblueTest {
+  /**
+   * Test Bound {@link Bound#bind(BoundCurveExtrapolator, BoundCurveExtrapolator)}.
+   *
+   * <ul>
+   *   <li>Then return {@link Bound}.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#bind(BoundCurveExtrapolator, BoundCurveExtrapolator)}
+   */
+  @Test
+  @DisplayName("Test Bound bind(BoundCurveExtrapolator, BoundCurveExtrapolator); then return Bound")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "BoundCurveInterpolator Bound.bind(BoundCurveExtrapolator, BoundCurveExtrapolator)"
+  })
+  void testBoundBind_thenReturnBound() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act
+    BoundCurveInterpolator actualBindResult =
+        bound.bind(ExceptionCurveExtrapolator.INSTANCE, ExceptionCurveExtrapolator.INSTANCE);
+
+    // Assert
+    assertTrue(actualBindResult instanceof Bound);
+    DoubleArray doParameterSensitivityResult =
+        ((Bound) actualBindResult).doParameterSensitivity(10.0d);
+    assertEquals(0.0d, doParameterSensitivityResult.min());
+    assertEquals(0.0d, ((Bound) actualBindResult).doInterpolateFromExtrapolator(10.0d));
+    assertEquals(0.0d, ((Bound) actualBindResult).doFirstDerivative(10.0d));
+    assertEquals(0.0d, ((Bound) actualBindResult).doInterpolate(10.0d));
+    assertEquals(1, doParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, doParameterSensitivityResult.max());
+    assertEquals(1.0d, doParameterSensitivityResult.sum());
+    assertEquals(3, doParameterSensitivityResult.size());
+    assertEquals(3, doParameterSensitivityResult.toList().size());
+    assertFalse(doParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {0.0d, 0.0d, 1.0d}, doParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+
+  /**
+   * Test Bound {@link Bound#doFirstDerivative(double)}.
+   *
+   * <ul>
+   *   <li>Then return zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doFirstDerivative(double)}
+   */
+  @Test
+  @DisplayName("Test Bound doFirstDerivative(double); then return zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"double Bound.doFirstDerivative(double)"})
+  void testBoundDoFirstDerivative_thenReturnZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act and Assert
+    assertEquals(0.0d, bound.doFirstDerivative(10.0d));
+  }
+
+  /**
+   * Test Bound {@link Bound#doInterpolate(double)}.
+   *
+   * <ul>
+   *   <li>When {@code 1.0E-12}.
+   *   <li>Then return zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doInterpolate(double)}
+   */
+  @Test
+  @DisplayName("Test Bound doInterpolate(double); when '1.0E-12'; then return zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"double Bound.doInterpolate(double)"})
+  void testBoundDoInterpolate_when10e12_thenReturnZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act and Assert
+    assertEquals(0.0d, bound.doInterpolate(1.0E-12d));
+  }
+
+  /**
+   * Test Bound {@link Bound#doInterpolate(double)}.
+   *
+   * <ul>
+   *   <li>When {@link Double#NaN}.
+   *   <li>Then return zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doInterpolate(double)}
+   */
+  @Test
+  @DisplayName("Test Bound doInterpolate(double); when NaN; then return zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"double Bound.doInterpolate(double)"})
+  void testBoundDoInterpolate_whenNaN_thenReturnZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act and Assert
+    assertEquals(0.0d, bound.doInterpolate(Double.NaN));
+  }
+
+  /**
+   * Test Bound {@link Bound#doInterpolate(double)}.
+   *
+   * <ul>
+   *   <li>When ten.
+   *   <li>Then return zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doInterpolate(double)}
+   */
+  @Test
+  @DisplayName("Test Bound doInterpolate(double); when ten; then return zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"double Bound.doInterpolate(double)"})
+  void testBoundDoInterpolate_whenTen_thenReturnZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act and Assert
+    assertEquals(0.0d, bound.doInterpolate(10.0d));
+  }
+
+  /**
+   * Test Bound {@link Bound#doParameterSensitivity(double)}.
+   *
+   * <ul>
+   *   <li>When {@code 1.0E-12}.
+   *   <li>Then return toList third doubleValue is zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doParameterSensitivity(double)}
+   */
+  @Test
+  @DisplayName(
+      "Test Bound doParameterSensitivity(double); when '1.0E-12'; then return toList third doubleValue is zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"DoubleArray Bound.doParameterSensitivity(double)"})
+  void testBoundDoParameterSensitivity_when10e12_thenReturnToListThirdDoubleValueIsZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act
+    DoubleArray actualDoParameterSensitivityResult = bound.doParameterSensitivity(1.0E-12d);
+
+    // Assert
+    assertEquals(0.0d, actualDoParameterSensitivityResult.min());
+    List<Double> toListResult = actualDoParameterSensitivityResult.toList();
+    assertEquals(3, toListResult.size());
+    assertEquals(0.0d, toListResult.get(1).doubleValue());
+    assertEquals(0.0d, toListResult.get(2).doubleValue());
+    assertEquals(1, actualDoParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.max());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.sum());
+    assertEquals(1.0d, toListResult.get(0).doubleValue());
+    assertEquals(3, actualDoParameterSensitivityResult.size());
+    assertFalse(actualDoParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {1.0d, 0.0d, 0.0d}, actualDoParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+
+  /**
+   * Test Bound {@link Bound#doParameterSensitivity(double)}.
+   *
+   * <ul>
+   *   <li>When {@link Double#NaN}.
+   *   <li>Then return toList first doubleValue is zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doParameterSensitivity(double)}
+   */
+  @Test
+  @DisplayName(
+      "Test Bound doParameterSensitivity(double); when NaN; then return toList first doubleValue is zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"DoubleArray Bound.doParameterSensitivity(double)"})
+  void testBoundDoParameterSensitivity_whenNaN_thenReturnToListFirstDoubleValueIsZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act
+    DoubleArray actualDoParameterSensitivityResult = bound.doParameterSensitivity(Double.NaN);
+
+    // Assert
+    assertEquals(0.0d, actualDoParameterSensitivityResult.min());
+    List<Double> toListResult = actualDoParameterSensitivityResult.toList();
+    assertEquals(3, toListResult.size());
+    assertEquals(0.0d, toListResult.get(0).doubleValue());
+    assertEquals(0.0d, toListResult.get(1).doubleValue());
+    assertEquals(1, actualDoParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.max());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.sum());
+    assertEquals(1.0d, toListResult.get(2).doubleValue());
+    assertEquals(3, actualDoParameterSensitivityResult.size());
+    assertFalse(actualDoParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {0.0d, 0.0d, 1.0d}, actualDoParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+
+  /**
+   * Test Bound {@link Bound#doParameterSensitivity(double)}.
+   *
+   * <ul>
+   *   <li>When ten.
+   *   <li>Then return toList first doubleValue is zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#doParameterSensitivity(double)}
+   */
+  @Test
+  @DisplayName(
+      "Test Bound doParameterSensitivity(double); when ten; then return toList first doubleValue is zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"DoubleArray Bound.doParameterSensitivity(double)"})
+  void testBoundDoParameterSensitivity_whenTen_thenReturnToListFirstDoubleValueIsZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound bound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act
+    DoubleArray actualDoParameterSensitivityResult = bound.doParameterSensitivity(10.0d);
+
+    // Assert
+    assertEquals(0.0d, actualDoParameterSensitivityResult.min());
+    List<Double> toListResult = actualDoParameterSensitivityResult.toList();
+    assertEquals(3, toListResult.size());
+    assertEquals(0.0d, toListResult.get(0).doubleValue());
+    assertEquals(0.0d, toListResult.get(1).doubleValue());
+    assertEquals(1, actualDoParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.max());
+    assertEquals(1.0d, actualDoParameterSensitivityResult.sum());
+    assertEquals(1.0d, toListResult.get(2).doubleValue());
+    assertEquals(3, actualDoParameterSensitivityResult.size());
+    assertFalse(actualDoParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {0.0d, 0.0d, 1.0d}, actualDoParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+
+  /**
+   * Test Bound {@link Bound#Bound(Bound, BoundCurveExtrapolator, BoundCurveExtrapolator)}.
+   *
+   * <ul>
+   *   <li>Then return doParameterSensitivity ten min is zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#Bound(Bound, BoundCurveExtrapolator,
+   * BoundCurveExtrapolator)}
+   */
+  @Test
+  @DisplayName(
+      "Test Bound new Bound(Bound, BoundCurveExtrapolator, BoundCurveExtrapolator); then return doParameterSensitivity ten min is zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void Bound.<init>(Bound, BoundCurveExtrapolator, BoundCurveExtrapolator)"})
+  void testBoundNewBound_thenReturnDoParameterSensitivityTenMinIsZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+    Bound base = new Bound(xValues, DoubleArray.filled(3));
+
+    // Act
+    Bound actualBound =
+        new Bound(base, ExceptionCurveExtrapolator.INSTANCE, ExceptionCurveExtrapolator.INSTANCE);
+
+    // Assert
+    DoubleArray doParameterSensitivityResult = actualBound.doParameterSensitivity(10.0d);
+    assertEquals(0.0d, doParameterSensitivityResult.min());
+    assertEquals(0.0d, actualBound.doInterpolateFromExtrapolator(10.0d));
+    assertEquals(0.0d, actualBound.doFirstDerivative(10.0d));
+    assertEquals(0.0d, actualBound.doInterpolate(10.0d));
+    assertEquals(1, doParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, doParameterSensitivityResult.max());
+    assertEquals(1.0d, doParameterSensitivityResult.sum());
+    assertEquals(3, doParameterSensitivityResult.size());
+    assertEquals(3, doParameterSensitivityResult.toList().size());
+    assertFalse(doParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {0.0d, 0.0d, 1.0d}, doParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+
+  /**
+   * Test Bound {@link Bound#Bound(DoubleArray, DoubleArray)}.
+   *
+   * <ul>
+   *   <li>When filled three.
+   *   <li>Then return doParameterSensitivity ten min is zero.
+   * </ul>
+   *
+   * <p>Method under test: {@link Bound#Bound(DoubleArray, DoubleArray)}
+   */
+  @Test
+  @DisplayName(
+      "Test Bound new Bound(DoubleArray, DoubleArray); when filled three; then return doParameterSensitivity ten min is zero")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void Bound.<init>(DoubleArray, DoubleArray)"})
+  void testBoundNewBound_whenFilledThree_thenReturnDoParameterSensitivityTenMinIsZero() {
+    // Arrange
+    DoubleArray xValues = DoubleArray.filled(3);
+
+    // Act
+    Bound actualBound = new Bound(xValues, DoubleArray.filled(3));
+
+    // Assert
+    DoubleArray doParameterSensitivityResult = actualBound.doParameterSensitivity(10.0d);
+    assertEquals(0.0d, doParameterSensitivityResult.min());
+    assertEquals(0.0d, actualBound.doInterpolateFromExtrapolator(10.0d));
+    assertEquals(0.0d, actualBound.doFirstDerivative(10.0d));
+    assertEquals(0.0d, actualBound.doInterpolate(10.0d));
+    assertEquals(1, doParameterSensitivityResult.dimensions());
+    assertEquals(1.0d, doParameterSensitivityResult.max());
+    assertEquals(1.0d, doParameterSensitivityResult.sum());
+    assertEquals(3, doParameterSensitivityResult.size());
+    assertEquals(3, doParameterSensitivityResult.toList().size());
+    assertFalse(doParameterSensitivityResult.isEmpty());
+    assertArrayEquals(
+        new double[] {0.0d, 0.0d, 1.0d}, doParameterSensitivityResult.toArrayUnsafe(), 0.0);
+  }
+}
